@@ -2,19 +2,19 @@ package vehicle
 
 type VehicleQuery struct {
 	Type          VehicleType `json:"type"`
-	Line          int64       `json:"line"`
-	BrigadeNumber int64       `json:"brigade"`
+	Line          string      `json:"line"`    // string due to some lines starting with letters N or L
+	BrigadeNumber string      `json:"brigade"` // string due to some brigades starting with 0
 }
 
 type VehicleQueryOption func(*VehicleQuery)
 
-func WithLine(line int64) VehicleQueryOption {
+func WithLine(line string) VehicleQueryOption {
 	return func(query *VehicleQuery) {
 		query.Line = line
 	}
 }
 
-func WithBrigade(brigade int64) VehicleQueryOption {
+func WithBrigade(brigade string) VehicleQueryOption {
 	return func(query *VehicleQuery) {
 		query.BrigadeNumber = brigade
 	}

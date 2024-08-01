@@ -25,7 +25,7 @@ func main() {
 	// }
 
 	// Specific query - bus 411
-	specificLineLocations, err := client.FetchBuses(vehicle.WithLine(411))
+	specificLineLocations, err := client.FetchBuses(vehicle.WithLine("411"))
 	if err != nil {
 		if errors.Is(err, &waw.UnauthorizedAccessError{}) {
 			fmt.Println("The API did not recognize the provided token, make sure to set up GOWAW_KEY environment variable")
