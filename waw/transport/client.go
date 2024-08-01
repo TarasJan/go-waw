@@ -67,7 +67,7 @@ func (c *Client) fetch(vq *vehicle.VehicleQuery) ([]vehicle.VehicleLocation, err
 		if err != nil {
 			return nil, errors.New("unidentified API error occured")
 		} else {
-			return nil, &waw.UnauthorizedAccessError{}
+			return nil, &waw.WarsawAPIError{ErrorMessage: string(resBody)}
 		}
 	}
 

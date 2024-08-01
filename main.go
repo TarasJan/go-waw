@@ -1,11 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
-	"github.com/TarasJan/go-waw/waw"
 	"github.com/TarasJan/go-waw/waw/transport"
 	"github.com/TarasJan/go-waw/waw/transport/vehicle"
 )
@@ -15,9 +13,6 @@ func main() {
 	client := transport.NewClient(apikey)
 	// vehicleLocations, err := client.FetchTrams()
 	// if err != nil {
-	// 	if errors.Is(err, &waw.UnauthorizedAccessError{}) {
-	// 		fmt.Println("The API did not recognize the provided token, make sure to set up GOWAW_KEY environment variable")
-	// 	}
 	// 	fmt.Println(err)
 	// }
 	// for _, location := range vehicleLocations {
@@ -27,12 +22,18 @@ func main() {
 	// Specific query - bus 411
 	specificLineLocations, err := client.FetchBuses(vehicle.WithLine("411"))
 	if err != nil {
-		if errors.Is(err, &waw.UnauthorizedAccessError{}) {
-			fmt.Println("The API did not recognize the provided token, make sure to set up GOWAW_KEY environment variable")
-		}
 		fmt.Println(err)
 	}
 	for _, location := range specificLineLocations {
+		fmt.Printf("%+v\n", location)
+	}
+
+	// Specific query - tram 4
+	tramLocations, err := client.FetchTrams(vehicle.WithLine("4"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, location := range tramLocations {
 		fmt.Printf("%+v\n", location)
 	}
 

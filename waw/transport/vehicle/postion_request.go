@@ -26,7 +26,7 @@ func (vpr *VehiclePositionRequest) ToValues() url.Values {
 		values.Set("line", vpr.Line)
 	}
 	if vpr.BrigadeNumber != "" {
-		values.Set("brigade", vpr.Line)
+		values.Set("brigade", vpr.BrigadeNumber)
 	}
 
 	return values
