@@ -1,4 +1,4 @@
-package gowaw
+package waw
 
 type ErrorResponse struct {
 	Result string `json:"result"`

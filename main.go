@@ -3,9 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
-	"gowaw/gowaw"
-	"gowaw/gowaw/transport"
 	"os"
+
+	"github.com/TarasJan/go-waw/waw"
+	"github.com/TarasJan/go-waw/waw/transport"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 	client := transport.NewClient(apikey)
 	vehicleLocations, err := client.FetchTrams()
 	if err != nil {
-		if errors.Is(err, &gowaw.UnauthorizedAccessError{}) {
+		if errors.Is(err, &waw.UnauthorizedAccessError{}) {
 			fmt.Println("The API did not recognize the provided token, make sure to set up GOWAW_KEY environment variable")
 		}
 		fmt.Println(err)

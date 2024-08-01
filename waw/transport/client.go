@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gowaw/gowaw"
-	"gowaw/gowaw/transport/vehicle"
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/TarasJan/go-waw/waw"
+	"github.com/TarasJan/go-waw/waw/transport/vehicle"
 )
 
 type Client struct {
@@ -55,7 +56,7 @@ func (c *Client) fetch(vt vehicle.VehicleType) ([]vehicle.VehicleLocation, error
 	}
 
 	var response vehicle.VehiclePositionResponse
-	var errorResponse gowaw.ErrorResponse
+	var errorResponse waw.ErrorResponse
 
 	err = json.Unmarshal(resBody, &response)
 	if err != nil {
@@ -63,7 +64,7 @@ func (c *Client) fetch(vt vehicle.VehicleType) ([]vehicle.VehicleLocation, error
 		if err != nil {
 			return nil, errors.New("unidentified API error occured")
 		} else {
-			return nil, &gowaw.UnauthorizedAccessError{}
+			return nil, &waw.UnauthorizedAccessError{}
 		}
 	}
 
@@ -71,7 +72,7 @@ func (c *Client) fetch(vt vehicle.VehicleType) ([]vehicle.VehicleLocation, error
 }
 
 func (c *Client) vehiclesURL(vt vehicle.VehicleType) *url.URL {
-	urlBase := fmt.Sprintf("%s/api/action/busestrams_get", gowaw.APIURL)
+	urlBase := fmt.Sprintf("%s/api/action/busestrams_get", waw.APIURL)
 	url, _ := url.Parse(urlBase)
 	url.RawQuery = c.newRequest(vt).ToValues().Encode()
 	return url
