@@ -1,3 +1,6 @@
+
+![gowaw](https://github.com/user-attachments/assets/2830dfd8-fe82-4400-a1fa-513c554b79e6)
+
 ## gowaw - Go client for Warsaw Public API Platform
 
 The city of Warsaw makes its public API available at:
