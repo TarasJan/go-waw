@@ -1,11 +1,11 @@
 package vehicle
 
-const VehicleRequestResourcId = "f2e5503e-927d-4ad3-9500-4ab9e55deb59"
+const ResourceId = "f2e5503e-927d-4ad3-9500-4ab9e55deb59"
 
 type VehicleType int64
 
 const (
-	Bus  VehicleType = 1
+	Bus  VehicleType = 1 // indexing starting from 1 as in the API
 	Tram VehicleType = 2
 )
 
