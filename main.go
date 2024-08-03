@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/TarasJan/go-waw/waw/transport"
 	"github.com/TarasJan/go-waw/waw/transport/vehicle"
 )
 
 func main() {
-	apikey := os.Getenv("GOWAW_KEY")
-	client := transport.NewClient(apikey)
+	client, err := transport.NewClient()
+	if err != nil {
+		panic(err)
+	}
 	// vehicleLocations, err := client.FetchTrams()
 	// if err != nil {
 	// 	fmt.Println(err)
