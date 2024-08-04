@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/TarasJan/go-waw/waw/transport"
-	"github.com/TarasJan/go-waw/waw/transport/vehicle"
 )
 
 func main() {
@@ -30,25 +29,41 @@ func main() {
 	// }
 
 	// Specific query - tram 4
-	tramLocations, err := client.Vehicles.FetchTrams(vehicle.WithLine("4"))
-	if err != nil {
-		fmt.Println(err)
-	}
-	for _, location := range tramLocations {
-		fmt.Printf("%+v\n", location)
-	}
+	// tramLocations, err := client.Vehicles.FetchTrams(vehicle.WithLine("4"))
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// for _, location := range tramLocations {
+	// 	fmt.Printf("%+v\n", location)
+	// }
 
-	// Dictionary query
-	dictionary, err := client.Dictionary.Get()
-	if err != nil {
-		fmt.Println(err)
-	}
+	// // Dictionary query
+	// dictionary, err := client.Dictionary.Get()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	for _, street := range dictionary.Streets {
-		fmt.Println(street)
-	}
+	// for _, street := range dictionary.Streets {
+	// 	fmt.Println(street)
+	// }
 
 	// for _, location := range dictionary.Locations {
 	// 	fmt.Println(location)
 	// }
+
+	// timetable, err := client.Timetables.Get()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, tableObject := range timetable {
+	// 	fmt.Println(tableObject.Values)
+	// }
+
+	stops, err := client.Stops.Get()
+	if err != nil {
+		panic(err)
+	}
+	for _, stop := range stops {
+		fmt.Println(stop.GroupName)
+	}
 }

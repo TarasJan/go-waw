@@ -3,6 +3,8 @@ package transport
 import (
 	"github.com/TarasJan/go-waw/waw"
 	"github.com/TarasJan/go-waw/waw/transport/dictionary"
+	"github.com/TarasJan/go-waw/waw/transport/stop"
+	"github.com/TarasJan/go-waw/waw/transport/timetable"
 	"github.com/TarasJan/go-waw/waw/transport/vehicle"
 )
 
@@ -10,6 +12,8 @@ type Client struct {
 	APIKey     string
 	Vehicles   *vehicle.VehicleClient
 	Dictionary *dictionary.DictionaryClient
+	Timetables *timetable.TimetableClient
+	Stops      *stop.StopClient
 }
 
 func NewClient(key ...string) (*Client, error) {
@@ -21,5 +25,7 @@ func NewClient(key ...string) (*Client, error) {
 		APIKey:     APIKey,
 		Vehicles:   vehicle.NewVehicleClient(APIKey),
 		Dictionary: dictionary.NewDictionaryClient(APIKey),
+		Timetables: timetable.NewTimetableClient(APIKey),
+		Stops:      stop.NewStopClient(APIKey),
 	}, nil
 }

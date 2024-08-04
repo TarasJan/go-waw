@@ -1,11 +1,8 @@
 package dictionary
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 
@@ -23,35 +20,16 @@ func NewDictionaryClient(key string) *DictionaryClient {
 }
 
 func (c *DictionaryClient) Get() (*Dictionary, error) {
-	req, err := http.NewRequest(http.MethodGet, c.dictionaryURL().String(), bytes.NewReader([]byte{}))
+	resBody, err := waw.PerformAPIRequest(http.MethodGet, c.dictionaryURL().String())
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Add("Cache-Control", "no-cache")
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println(string(resBody))
 
 	var response DictionaryResponse
-	var errorResponse waw.ErrorResponse
 
 	err = json.Unmarshal(resBody, &response)
 	if err != nil {
-		err = json.Unmarshal(resBody, &errorResponse)
-		if err != nil {
-			return nil, errors.New("unidentified API error occured")
-		} else {
-			return nil, &waw.WarsawAPIError{ErrorMessage: string(resBody)}
-		}
+		return nil, waw.UnmarshalAPIError(resBody)
 	}
 
 	return response.Result, nil
