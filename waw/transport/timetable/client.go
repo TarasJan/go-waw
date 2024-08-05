@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/TarasJan/go-waw/waw"
+	"github.com/TarasJan/go-waw/waw/transport/stop"
 )
 
 const ResourceStopTimetableId = "8b27f4c17-5c50-4a5b-89dd-236b282bc499"
@@ -21,8 +22,54 @@ func NewTimetableClient(key string) *TimetableClient {
 	return &TimetableClient{APIKey: key}
 }
 
+func (c *TimetableClient) GetTimetableFor(stop *stop.Stop, line string) (*Timetable, error) {
+	request := c.newRequest(ResourceTimetableId).WithStop(stop).WithLine(line)
+	resBody, err := waw.PerformAPIRequest(http.MethodGet, c.timetableURL(request).String())
+	if err != nil {
+		return nil, err
+	}
+
+	var response waw.WawResponse
+
+	err = json.Unmarshal(resBody, &response)
+	if err != nil {
+		return nil, waw.UnmarshalAPIError(resBody)
+	}
+
+	timetable, err := NewTimetableFrom(response)
+	if err != nil {
+		return nil, err
+	}
+
+	return timetable.WithLine(line), nil
+}
+
+func (c *TimetableClient) GetLinesFor(stop *stop.Stop) ([]string, error) {
+	request := c.newRequest(ResourceLineTimetableId).WithStop(stop)
+	resBody, err := waw.PerformAPIRequest(http.MethodGet, c.timetableURL(request).String())
+	if err != nil {
+		return nil, err
+	}
+
+	var response waw.WawResponse
+
+	err = json.Unmarshal(resBody, &response)
+	if err != nil {
+		return nil, waw.UnmarshalAPIError(resBody)
+	}
+
+	lines := make([]string, 0)
+	for _, record := range response.Result {
+		lines = append(lines, record.Values[0].Value)
+	}
+
+	return lines, nil
+
+}
+
 func (c *TimetableClient) Get() ([]waw.WawValue, error) {
-	resBody, err := waw.PerformAPIRequest(http.MethodGet, c.timetableURL().String())
+	request := c.newRequest(ResourceLineTimetableId)
+	resBody, err := waw.PerformAPIRequest(http.MethodGet, c.timetableURL(request).String())
 	if err != nil {
 		return nil, err
 	}
@@ -37,16 +84,16 @@ func (c *TimetableClient) Get() ([]waw.WawValue, error) {
 	return response.Result, nil
 }
 
-func (c *TimetableClient) newRequest() *TimetableRequest {
+func (c *TimetableClient) newRequest(resourceId string) *TimetableRequest {
 	return &TimetableRequest{
 		ApiKey:     c.APIKey,
-		ResourceId: ResourceStopTimetableId,
+		ResourceId: resourceId,
 	}
 }
 
-func (c *TimetableClient) timetableURL() *url.URL {
+func (c *TimetableClient) timetableURL(request *TimetableRequest) *url.URL {
 	urlBase := fmt.Sprintf("%s/api/action/dbtimetable_get", waw.APIURL)
 	url, _ := url.Parse(urlBase)
-	url.RawQuery = c.newRequest().ToValues().Encode()
+	url.RawQuery = request.ToValues().Encode()
 	return url
 }

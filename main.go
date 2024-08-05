@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/TarasJan/go-waw/waw/transport"
+	"github.com/TarasJan/go-waw/waw/transport/stop"
 )
 
 func main() {
@@ -64,6 +65,31 @@ func main() {
 		panic(err)
 	}
 	for _, stop := range stops {
-		fmt.Println(stop.GroupName)
+		fmt.Println(stop.Name)
+	}
+
+	// Bukowskiego bus stop
+	stop := &stop.Stop{
+		BusStopId: "2124",
+		BusStopNr: "01",
+	}
+	lines, err := client.Timetables.GetLinesFor(stop)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, line := range lines {
+		fmt.Println(line)
+	}
+
+	timetable, err := client.Timetables.GetTimetableFor(stop, lines[0])
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Timetable for : ", timetable.Line)
+
+	for _, arrival := range timetable.Records {
+		fmt.Println(arrival)
 	}
 }

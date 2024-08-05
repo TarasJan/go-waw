@@ -8,9 +8,9 @@ import (
 )
 
 type Stop struct {
-	GroupId    string
-	UnitId     string
-	GroupName  string
+	BusStopId  string // Id of the group of stops with the same name
+	BusStopNr  string // Number of the stop in its group
+	Name       string // Name of the bus stop group
 	StreetId   string
 	Lat        float64
 	Lon        float64
@@ -22,11 +22,11 @@ func NewStopFrom(valueObject waw.WawValue) *Stop {
 	values := valueObject.ToMap()
 	lat, _ := strconv.ParseFloat(values["szer_geo"], 64)
 	lon, _ := strconv.ParseFloat(values["dlug_geo"], 64)
-	time, _ := time.Parse("2006-01-02 03:04:05", values["obowiazuje_od"])
+	time, _ := time.Parse("2006-01-02 15:04:05", values["obowiazuje_od"])
 	return &Stop{
-		GroupId:    values["zespol"],
-		UnitId:     values["slupek"],
-		GroupName:  values["nazwa_zespolu"],
+		BusStopId:  values["zespol"],
+		BusStopNr:  values["slupek"],
+		Name:       values["nazwa_zespolu"],
 		StreetId:   values["id_ulicy"],
 		Lat:        lat,
 		Lon:        lon,
