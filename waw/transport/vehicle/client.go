@@ -1,11 +1,8 @@
 package vehicle
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 
@@ -39,35 +36,16 @@ func (c *VehicleClient) FetchTrams(options ...VehicleQueryOption) ([]VehicleLoca
 }
 
 func (c *VehicleClient) fetch(vq *VehicleQuery) ([]VehicleLocation, error) {
-	req, err := http.NewRequest(http.MethodPost, c.vehiclesURL(vq).String(), bytes.NewReader([]byte{}))
+	resBody, err := waw.PerformAPIRequest(http.MethodPost, c.vehiclesURL(vq).String())
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Add("Cache-Control", "no-cache")
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println(string(resBody))
 
 	var response VehiclePositionResponse
-	var errorResponse waw.ErrorResponse
 
 	err = json.Unmarshal(resBody, &response)
 	if err != nil {
-		err = json.Unmarshal(resBody, &errorResponse)
-		if err != nil {
-			return nil, errors.New("unidentified API error occured")
-		} else {
-			return nil, &waw.WarsawAPIError{ErrorMessage: string(resBody)}
-		}
+		return nil, waw.UnmarshalAPIError(resBody)
 	}
 
 	return response.Result, nil
