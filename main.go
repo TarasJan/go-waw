@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/TarasJan/go-waw/waw/transport"
+	"github.com/TarasJan/go-waw/waw/transport/vehicle"
 )
 
 func main() {
@@ -29,13 +30,13 @@ func main() {
 	// }
 
 	// Specific query - tram 4
-	// tramLocations, err := client.Vehicles.FetchTrams(vehicle.WithLine("4"))
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// for _, location := range tramLocations {
-	// 	fmt.Printf("%+v\n", location)
-	// }
+	tramLocations, err := client.Vehicles.FetchTrams(vehicle.WithLine("4"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, location := range tramLocations {
+		fmt.Printf("%+v\n", location)
+	}
 
 	// // Dictionary query
 	// dictionary, err := client.Dictionary.Get()
@@ -100,12 +101,12 @@ func main() {
 	// 	fmt.Println(arrival)
 	// }
 
-	routes, err := client.Routes.Get()
-	if err != nil {
-		panic(err)
-	}
+	// routes, err := client.Routes.Get()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	for line := range routes {
-		fmt.Println(line)
-	}
+	// for line := range routes {
+	// 	fmt.Println(line)
+	// }
 }
