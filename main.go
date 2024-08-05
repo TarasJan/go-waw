@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/TarasJan/go-waw/waw/transport"
-	"github.com/TarasJan/go-waw/waw/transport/stop"
 )
 
 func main() {
@@ -60,36 +59,53 @@ func main() {
 	// 	fmt.Println(tableObject.Values)
 	// }
 
-	stops, err := client.Stops.Get()
-	if err != nil {
-		panic(err)
-	}
-	for _, stop := range stops {
-		fmt.Println(stop.Name)
-	}
+	// stops, err := client.Stops.Get()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, stop := range stops {
+	// 	fmt.Println(stop.Name)
+	// }
+
+	// stopsTemp, err := client.Stops.Get()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, stopt := range stopsTemp {
+	// 	fmt.Println(stopt.Name)
+	// }
 
 	// Bukowskiego bus stop
-	stop := &stop.Stop{
-		BusStopId: "2124",
-		BusStopNr: "01",
-	}
-	lines, err := client.Timetables.GetLinesFor(stop)
+	// stop := &stop.Stop{
+	// 	BusStopId: "2124",
+	// 	BusStopNr: "01",
+	// }
+	// lines, err := client.Timetables.GetLinesFor(stop)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// for _, line := range lines {
+	// 	fmt.Println(line)
+	// }
+
+	// timetable, err := client.Timetables.GetTimetableFor(stop, lines[0])
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// fmt.Println("Timetable for : ", timetable.Line)
+
+	// for _, arrival := range timetable.Records {
+	// 	fmt.Println(arrival)
+	// }
+
+	routes, err := client.Routes.Get()
 	if err != nil {
 		panic(err)
 	}
 
-	for _, line := range lines {
+	for line := range routes {
 		fmt.Println(line)
-	}
-
-	timetable, err := client.Timetables.GetTimetableFor(stop, lines[0])
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Timetable for : ", timetable.Line)
-
-	for _, arrival := range timetable.Records {
-		fmt.Println(arrival)
 	}
 }
