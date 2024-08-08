@@ -24,8 +24,9 @@ func NewTimetableFrom(response waw.WawResponse) (*Timetable, error) {
 
 	for _, values := range response.Result {
 		timeRecordParams := values.ToMap()
+		sanitized_time := normalizeZTMTime(timeRecordParams["czas"])
 
-		arrival, err := time.Parse("15:04:05", timeRecordParams["czas"])
+		arrival, err := time.Parse("15:04:05", sanitized_time)
 		if err != nil {
 			return nil, fmt.Errorf("unparseable time expression found in the response: %s", timeRecordParams["czas"])
 		}
@@ -47,4 +48,13 @@ func NewTimetableFrom(response waw.WawResponse) (*Timetable, error) {
 func (t *Timetable) WithLine(line string) *Timetable {
 	t.Line = line
 	return t
+}
+
+// The public transport sometimes expresses midnight as 24 which breaks the time parsing
+func normalizeZTMTime(time string) string {
+	if time[0:2] == "24" {
+		return "00" + time[2:]
+	}
+
+	return time
 }
