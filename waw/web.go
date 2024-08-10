@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -32,7 +31,6 @@ func (wv WawValue) ToMap() map[string]string {
 }
 
 func PerformAPIRequest(method string, url string) ([]byte, error) {
-	fmt.Println(url)
 	req, err := http.NewRequest(method, url, bytes.NewReader([]byte{}))
 	if err != nil {
 		return nil, err
